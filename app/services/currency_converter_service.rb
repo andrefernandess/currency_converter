@@ -8,18 +8,30 @@ class CurrencyConverterService
   end
 
   def call
-    validate_amount!
+    validate_inputs!
 
     rate_data = fetch_conversion_rate
-    converted_value = calculate_converted_value(rate_data)
+    rate = extract_rate(rate_data)
+    converted_value = calculate_converted_value(rate)
 
-    create_transaction(rate_data, converted_value)
+    create_transaction(rate, converted_value)
   end
 
   private
 
+  def validate_inputs!
+    validate_amount!
+    validate_currencies!
+  end
+
   def validate_amount!
-    raise "Amount must be greater than zero" if @amount <= 0
+    raise ArgumentError, "Amount must be greater than zero" if @amount <= 0
+  end
+
+  def validate_currencies!
+    if @from_currency == @to_currency
+      raise ArgumentError, "From and To currencies must be different"
+    end
   end
 
   def fetch_conversion_rate
@@ -28,22 +40,25 @@ class CurrencyConverterService
       currencies: [@to_currency]
     )
     
-    response["data"][@to_currency] || raise("Conversion rate not found")
+    response["data"][@to_currency] || raise(ArgumentError, "Conversion rate not found")
   end
 
-  def calculate_converted_value(rate_data)
-    rate = rate_data["value"].to_f
+  def extract_rate(rate_data)
+    rate_data["value"].to_f
+  end
+
+  def calculate_converted_value(rate)
     (@amount * rate).round(2)
   end
 
-  def create_transaction(rate_data, converted_value)
+  def create_transaction(rate, converted_value)
     Transaction.create!(
       user_id: @user_id,
       from_currency: @from_currency,
       to_currency: @to_currency,
       from_value: @amount,
       to_value: converted_value,
-      rate: rate_data["value"].to_f
+      rate: rate
     )
   end
 
