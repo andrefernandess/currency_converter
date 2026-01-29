@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory :transaction do
-    user_id { 1 }
-    from_currency { "MyString" }
-    to_currency { "MyString" }
-    from_value { "9.99" }
-    to_value { "9.99" }
-    rate { "9.99" }
+    user_id { 123 }
+    from_currency { 'USD' }
+    to_currency { 'BRL' }
+    from_value { 100.0 }
+    to_value { 525.32 }
+    rate { 5.2532 }
   end
 end
