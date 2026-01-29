@@ -1,6 +1,6 @@
 require "faraday"
 
-class CurrencyApiClient
+class CurrencyApiClientService
   BASE_URL = "https://api.currencyapi.com/v3/".freeze
 
   def initialize(api_key = ENV["CURRENCY_API_KEY"])
