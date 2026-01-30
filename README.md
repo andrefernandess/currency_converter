@@ -2,23 +2,6 @@
 
 API REST para conversão de moedas em tempo real, desenvolvida em Ruby on Rails.
 
-## 📋 Índice
-
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Tecnologias](#tecnologias)
-- [Funcionalidades](#funcionalidades)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação](#instalação)
-- [Configuração](#configuração)
-- [Executando o Projeto](#executando-o-projeto)
-- [Executando os Testes](#executando-os-testes)
-- [Endpoints da API](#endpoints-da-api)
-- [Exemplos de Uso](#exemplos-de-uso)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Autor](#autor)
-
----
-
 ## 📖 Sobre o Projeto
 
 API para conversão de moedas que utiliza a **Currency API** para obter taxas de câmbio atualizadas em tempo real. O sistema registra todas as conversões realizadas e permite consultar o histórico por usuário.
@@ -86,7 +69,6 @@ bundle install
 ```bash
 rails db:create
 rails db:migrate
-rails db:seed
 ```
 
 ## ⚙️ Configuração
