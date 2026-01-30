@@ -19,8 +19,12 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
+          url: 'https://currency-converter-api-zay7.onrender.com',
+          description: 'Servidor de Produção (Render)'
+        },
+        {
           url: 'http://localhost:3000',
-          description: 'Development server'
+          description: 'Servidor de Desenvolvimento (Local)'
         }
       ]
     }
