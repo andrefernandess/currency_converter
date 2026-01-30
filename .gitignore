@@ -92,3 +92,6 @@ dump.rdb
 # Ignore Docker volumes (opcional)
 /docker-data/
 /deploy-azure.sh
+
+# Render
+.render/

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Health check para Render
+  get '/health', to: proc { [200, {}, ['OK']] }
+
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   
