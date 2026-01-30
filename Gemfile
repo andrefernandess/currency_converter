@@ -25,6 +25,11 @@ gem "bootsnap", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
+# 
+# API documentation and testing
+gem 'rswag-specs'
+gem 'rswag-api'
+gem 'rswag-ui'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -38,11 +43,6 @@ group :development, :test do
   
   # Mock HTTP requests in tests
   gem "webmock", "~> 3.18"
-
-  # API documentation and testing
-  gem 'rswag-specs'
-  gem 'rswag-api'
-  gem 'rswag-ui'
 end
 
 group :development do
