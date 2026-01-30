@@ -7,6 +7,11 @@ info:
   contact:
     name: Andre
     email: andre.l.fernandess@hotmail.com
+servers:
+  - url: https://currency-converter-api-zay7.onrender.com
+    description: Servidor de Produção (Render)
+  - url: http://localhost:3000
+    description: Servidor de Desenvolvimento (Local)
 paths:
   "/api/v1/convert":
     post:
