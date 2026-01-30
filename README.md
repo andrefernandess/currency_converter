@@ -299,6 +299,14 @@ currency-converter-api/
 ├── Gemfile
 └── README.md
 ```
+
+## 📚 Documentação da API
+
+### Swagger UI (Interativo)
+Acesse a documentação interativa da API:
+
+## http://localhost:3000/api-docs
+
 ## 🧑‍💻 Autor
 
 ### Andre Luiz Fernandes

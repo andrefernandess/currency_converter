@@ -38,13 +38,16 @@ group :development, :test do
   
   # Mock HTTP requests in tests
   gem "webmock", "~> 3.18"
+
+  # API documentation and testing
+  gem 'rswag-specs'
+  gem 'rswag-api'
+  gem 'rswag-ui'
 end
 
 group :development do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "pry-rails"
   gem "pry-byebug"
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
 end
 
