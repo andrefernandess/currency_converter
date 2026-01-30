@@ -16,4 +16,7 @@ head -15 swagger/v1/swagger.yaml | grep -A 5 "servers:"
 echo "📁 File permissions:"
 ls -la swagger/v1/swagger.yaml || echo "Swagger file not found!"
 
+echo "🧹 Clearing Rails cache..."
+bundle exec rails tmp:clear RAILS_ENV=production || true
+
 echo "✅ Build complete!"
