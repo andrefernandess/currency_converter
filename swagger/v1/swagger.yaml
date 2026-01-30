@@ -10,6 +10,8 @@ info:
 servers:
   - url: https://currency-converter-api-ad1j.onrender.com
     description: Servidor de Produção (Render)
+  - url: http://localhost:3000
+    description: Servidor de Desenvolvimento (Local)
 paths:
   "/api/v1/convert":
     post:
