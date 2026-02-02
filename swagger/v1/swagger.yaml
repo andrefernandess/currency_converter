@@ -13,46 +13,219 @@ servers:
   - url: http://localhost:3000
     description: Servidor de Desenvolvimento (Local)
 paths:
+  "/api/v1/users":
+    get:
+      summary: Listar todos os usuários
+      tags:
+        - Usuários
+      description: Retorna uma lista com todos os usuários cadastrados
+      responses:
+        '200':
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Criar novo usuário
+      tags:
+        - Usuários
+      description: Cadastra um novo usuário no sistema
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Andre Silva
+                      description: Nome do usuário (mínimo 2 caracteres)
+                    email:
+                      type: string
+                      example: andre@teste.com
+                      description: E-mail único do usuário
+                  required:
+                    - name
+                    - email
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  "/api/v1/users/{id}":
+    get:
+      summary: Buscar usuário por ID
+      tags:
+        - Usuários
+      description: Retorna os dados de um usuário específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do usuário
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+    patch:
+      summary: Atualizar usuário
+      tags:
+        - Usuários
+      description: Atualiza os dados de um usuário existente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do usuário
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Andre Silva Atualizado
+                    email:
+                      type: string
+                      example: andre.novo@teste.com
+      responses:
+        '200':
+          description: Usuário atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Remover usuário
+      tags:
+        - Usuários
+      description: Remove um usuário do sistema (apenas se não tiver transações)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do usuário
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '204':
+          description: Usuário removido com sucesso
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+        '422':
+          description: Usuário possui transações vinculadas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   "/api/v1/convert":
     post:
       summary: Converter moeda
       tags:
-      - Conversões
-      description: Realiza a conversão entre duas moedas utilizando taxas em tempo
-        real
-      parameters: []
+        - Conversões
+      description: Realiza a conversão entre duas moedas utilizando taxas em tempo real
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversion:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                      example: 1
+                      description: ID do usuário (deve existir)
+                    from_currency:
+                      type: string
+                      example: USD
+                      description: Moeda de origem (USD, BRL, EUR, JPY)
+                    to_currency:
+                      type: string
+                      example: BRL
+                      description: Moeda de destino (USD, BRL, EUR, JPY)
+                    amount:
+                      type: number
+                      example: 100.0
+                      description: Valor a ser convertido
+                  required:
+                    - user_id
+                    - from_currency
+                    - to_currency
+                    - amount
       responses:
         '201':
           description: Conversão realizada com sucesso
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  transaction_id:
-                    type: integer
-                    example: 42
-                  user_id:
-                    type: integer
-                    example: 123
-                  from_currency:
-                    type: string
-                    example: USD
-                  to_currency:
-                    type: string
-                    example: BRL
-                  from_value:
-                    type: number
-                    example: 100.0
-                  to_value:
-                    type: number
-                    example: 525.32
-                  rate:
-                    type: number
-                    example: 5.2532
-                  timestamp:
-                    type: string
-                    example: '2024-05-19T18:00:00Z'
+                $ref: '#/components/schemas/Transaction'
         '422':
           description: Valor inválido
           content:
@@ -73,85 +246,30 @@ paths:
                   error:
                     type: string
                     example: 'Missing required parameter: conversion'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                conversion:
-                  type: object
-                  properties:
-                    user_id:
-                      type: integer
-                      example: 123
-                      description: ID do usuário
-                    from_currency:
-                      type: string
-                      example: USD
-                      description: Moeda de origem (USD, BRL, EUR, JPY)
-                    to_currency:
-                      type: string
-                      example: BRL
-                      description: Moeda de destino (USD, BRL, EUR, JPY)
-                    amount:
-                      type: number
-                      example: 100.0
-                      description: Valor a ser convertido
-                  required:
-                  - user_id
-                  - from_currency
-                  - to_currency
-                  - amount
+
   "/api/v1/transactions":
     get:
       summary: Listar transações do usuário
       tags:
-      - Transações
-      description: Lista todas as conversões realizadas por um usuário, ordenadas
-        da mais recente para a mais antiga
+        - Transações
+      description: Lista todas as conversões realizadas por um usuário, ordenadas da mais recente para a mais antiga
       parameters:
-      - name: user_id
-        in: query
-        required: true
-        description: ID do usuário
-        example: 123
-        schema:
-          type: integer
+        - name: user_id
+          in: query
+          required: true
+          description: ID do usuário
+          example: 1
+          schema:
+            type: integer
       responses:
         '200':
-          description: Lista vazia (usuário sem transações)
+          description: Lista de transações
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    transaction_id:
-                      type: integer
-                      example: 42
-                    user_id:
-                      type: integer
-                      example: 123
-                    from_currency:
-                      type: string
-                      example: USD
-                    to_currency:
-                      type: string
-                      example: BRL
-                    from_value:
-                      type: number
-                      example: 100.0
-                    to_value:
-                      type: number
-                      example: 525.32
-                    rate:
-                      type: number
-                      example: 5.2532
-                    timestamp:
-                      type: string
-                      example: '2024-05-19T18:00:00Z'
+                  $ref: '#/components/schemas/Transaction'
         '422':
           description: user_id ausente
           content:
@@ -162,6 +280,64 @@ paths:
                   error:
                     type: string
                     example: user_id parameter is required
-servers:
-- url: http://localhost:3000
-  description: Development server
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Andre Silva
+        email:
+          type: string
+          example: andre@teste.com
+        created_at:
+          type: string
+          format: date-time
+          example: '2026-02-02T18:00:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2026-02-02T18:00:00Z'
+    Transaction:
+      type: object
+      properties:
+        transaction_id:
+          type: integer
+          example: 42
+        user_id:
+          type: integer
+          example: 1
+        from_currency:
+          type: string
+          example: USD
+        to_currency:
+          type: string
+          example: BRL
+        from_value:
+          type: number
+          example: 100.0
+        to_value:
+          type: number
+          example: 525.32
+        rate:
+          type: number
+          example: 5.2532
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-02-02T18:00:00Z'
+    Error:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+          example:
+            - "Name can't be blank"
+            - "Email is invalid"

@@ -1,4 +1,5 @@
 class Transaction < ApplicationRecord
+  belongs_to :user
   VALID_CURRENCIES = %w[BRL USD EUR JPY].freeze
 
   validates :user_id, presence: true, numericality: { only_integer: true, greater_than: 0 }
