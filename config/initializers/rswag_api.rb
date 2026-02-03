@@ -14,7 +14,7 @@ Rswag::Api.configure do |c|
     # Adiciona dinamicamente os servidores baseado no ambiente
     swagger['servers'] = [
       {
-        'url' => 'https://currency-converter-api-ad1j.onrender.com',
+        'url' => 'https://currency-converter-api-6mjw.onrender.com',
         'description' => 'Servidor de Produção (Render)'
       },
       {

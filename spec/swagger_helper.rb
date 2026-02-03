@@ -19,7 +19,7 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
-          url: 'https://currency-converter-api-zay7.onrender.com',
+          url: 'https://currency-converter-api-6mjw.onrender.com',
           description: 'Servidor de Produção (Render)'
         },
         {
