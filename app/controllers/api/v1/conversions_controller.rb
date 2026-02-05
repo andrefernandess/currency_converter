@@ -1,12 +1,17 @@
+# frozen_string_literal: true
+
 class Api::V1::ConversionsController < ApplicationController
   include ApiErrorHandler
-  
+
   def create
-    converter = create_converter
+    result = conversion_service.call(
+      user_id: conversion_params[:user_id],
+      from_currency: conversion_params[:from_currency],
+      to_currency: conversion_params[:to_currency],
+      amount: conversion_params[:amount]
+    )
 
-    transaction = converter.call
-
-    render json: TransactionSerializer.new(transaction).as_json, status: :created
+    render json: TransactionSerializer.new(result).as_json, status: :created
   end
 
   private
@@ -15,12 +20,7 @@ class Api::V1::ConversionsController < ApplicationController
     params.require(:conversion).permit(:user_id, :from_currency, :to_currency, :amount)
   end
 
-  def create_converter
-    CurrencyConverterService.new(
-      user_id: conversion_params[:user_id],
-      from_currency: conversion_params[:from_currency],
-      to_currency: conversion_params[:to_currency],
-      amount: conversion_params[:amount]
-    )
+  def conversion_service
+    @conversion_service ||= Transactions::Services::CreateTransactionService.new
   end
 end
