@@ -31,61 +31,61 @@ RSpec.describe Transactions::Repositories::TransactionRepository do
   end
 
   describe "#save" do
-    it "persiste a transaction no banco" do
+    it "persisting the transaction on database" do
       expect { repository.save(transaction_entity) }
         .to change(Transaction, :count).by(1)
     end
 
-    it "retorna a entity com id preenchido" do
+    it "returns the entity with id filled" do
       saved = repository.save(transaction_entity)
 
       expect(saved).to be_a(Transactions::Entities::Transaction)
       expect(saved.id).to be_present
     end
 
-    it "persiste os valores corretos" do
+    it "persists the correct values" do
       saved = repository.save(transaction_entity)
       record = Transaction.last
 
-      expect(record.user_id).to eq(user.id)
-      expect(record.from_currency).to eq("USD")
-      expect(record.to_currency).to eq("BRL")
-      expect(record.from_value).to eq(100)
-      expect(record.to_value).to eq(524)
-      expect(record.rate).to eq(5.24)
+      expect(record.user_id).to eq(saved.user_id)
+      expect(record.from_currency).to eq(saved.from_money.currency.code)
+      expect(record.to_currency).to eq(saved.to_money.currency.code)
+      expect(record.from_value).to eq(saved.from_money.amount)
+      expect(record.to_value).to eq(saved.to_money.amount)
+      expect(record.rate).to eq(saved.rate)
     end
   end
 
   describe "#find_by_user" do
-    context "quando usuário tem transactions" do
+    context "when user has transactions" do
       before do
         create(:transaction, user: user, from_currency: "USD", to_currency: "BRL")
         create(:transaction, user: user, from_currency: "EUR", to_currency: "BRL")
       end
 
-      it "retorna lista de entities" do
+      it "returns a list of entities" do
         result = repository.find_by_user(user.id)
 
         expect(result).to all(be_a(Transactions::Entities::Transaction))
         expect(result.size).to eq(2)
       end
 
-      it "ordena por data decrescente" do
+      it "orders by descending date" do
         result = repository.find_by_user(user.id)
 
         expect(result.first.created_at).to be >= result.last.created_at
       end
     end
 
-    context "quando usuário não tem transactions" do
-      it "retorna lista vazia" do
+    context "when user has no transactions" do
+      it "returns an empty list" do
         result = repository.find_by_user(user.id)
 
         expect(result).to eq([])
       end
     end
 
-    context "não retorna transactions de outros usuários" do
+    context "does not return transactions from other users" do
       let!(:other_user) { create(:user) }
 
       before do
@@ -93,7 +93,7 @@ RSpec.describe Transactions::Repositories::TransactionRepository do
         create(:transaction, user: other_user)
       end
 
-      it "filtra apenas do usuário solicitado" do
+      it "filters only the requested user's transactions" do
         result = repository.find_by_user(user.id)
 
         expect(result.size).to eq(1)

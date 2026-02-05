@@ -7,37 +7,37 @@ RSpec.describe Transactions::ValueObjects::Money do
   let(:brl) { Transactions::ValueObjects::Currency.new("BRL") }
 
   describe ".new" do
-    context "com valores válidos" do
-      it "cria money com amount e currency" do
+    context "with valid values" do
+      it "creates money with amount and currency" do
         money = described_class.new(amount: 100, currency: usd)
         
         expect(money.amount).to eq(100)
         expect(money.currency).to eq(usd)
       end
 
-      it "aceita string como amount" do
+      it "accepts string as amount" do
         money = described_class.new(amount: "99.99", currency: usd)
         expect(money.amount).to eq(BigDecimal("99.99"))
       end
 
-      it "aceita BigDecimal como amount" do
+      it "accepts BigDecimal as amount" do
         money = described_class.new(amount: BigDecimal("50.5"), currency: brl)
         expect(money.amount).to eq(BigDecimal("50.5"))
       end
     end
 
-    context "com valores inválidos" do
-      it "rejeita amount negativo" do
+    context "with invalid values" do
+      it "rejects negative amount" do
         expect { described_class.new(amount: -10, currency: usd) }
           .to raise_error(ArgumentError, /must be greater than zero/)
       end
 
-      it "rejeita amount zero" do
+      it "rejects zero amount" do
         expect { described_class.new(amount: 0, currency: usd) }
           .to raise_error(ArgumentError, /must be greater than zero/)
       end
 
-      it "rejeita currency nil" do
+      it "rejects nil currency" do
         expect { described_class.new(amount: 100, currency: nil) }
           .to raise_error(ArgumentError)
       end
@@ -45,26 +45,26 @@ RSpec.describe Transactions::ValueObjects::Money do
   end
 
   describe "#currency" do
-    it "retorna o código da moeda" do
+    it "returns the currency code" do
       money = described_class.new(amount: 100, currency: brl)
       expect(money.currency.code).to eq("BRL")
     end
   end
 
   describe "#==" do
-    it "é igual quando mesmo amount e currency" do
+    it "is equal when same amount and currency" do
       money1 = described_class.new(amount: 100, currency: usd)
       money2 = described_class.new(amount: 100, currency: usd)
       expect(money1).to eq(money2)
     end
 
-    it "é diferente quando amounts diferentes" do
+    it "is different when amounts are different" do
       money1 = described_class.new(amount: 100, currency: usd)
       money2 = described_class.new(amount: 200, currency: usd)
       expect(money1).not_to eq(money2)
     end
 
-    it "é diferente quando currencies diferentes" do
+    it "is different when currencies are different" do
       money1 = described_class.new(amount: 100, currency: usd)
       money2 = described_class.new(amount: 100, currency: brl)
       expect(money1).not_to eq(money2)
@@ -72,7 +72,7 @@ RSpec.describe Transactions::ValueObjects::Money do
   end
 
   describe "#to_s" do
-    it "formata com 2 casas decimais e código" do
+    it "formats with 2 decimal places and code" do
       money = described_class.new(amount: 1234.5, currency: brl)
       expect(money.to_s).to eq("1234.50 BRL")
     end

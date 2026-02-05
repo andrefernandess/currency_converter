@@ -4,18 +4,18 @@ require "rails_helper"
 
 RSpec.describe Transactions::ValueObjects::Currency do
   describe ".new" do
-    context "com moeda válida" do
-      it "cria currency USD" do
+    context "with valid currency" do
+      it "creates currency USD" do
         currency = described_class.new("USD")
         expect(currency.code).to eq("USD")
       end
 
-      it "cria currency em minúsculo e normaliza" do
+      it "creates currency in lowercase and normalizes" do
         currency = described_class.new("brl")
         expect(currency.code).to eq("BRL")
       end
 
-      it "aceita todas as moedas suportadas" do
+      it "accepts all supported currencies" do
         %w[USD BRL EUR JPY].each do |code|
           currency = described_class.new(code)
           expect(currency.code).to eq(code)
@@ -23,18 +23,18 @@ RSpec.describe Transactions::ValueObjects::Currency do
       end
     end
 
-    context "com moeda inválida" do
-      it "rejeita moeda não suportada" do
+    context "with invalid currency" do
+      it "rejects unsupported currency" do
         expect { described_class.new("XXX") }
           .to raise_error(ArgumentError, /Invalid currency/)
       end
 
-      it "rejeita valor nil" do
+      it "rejects nil value" do
         expect { described_class.new(nil) }
           .to raise_error(ArgumentError)
       end
 
-      it "rejeita string vazia" do
+      it "rejects empty string" do
         expect { described_class.new("") }
           .to raise_error(ArgumentError)
       end
@@ -42,13 +42,13 @@ RSpec.describe Transactions::ValueObjects::Currency do
   end
 
   describe "#==" do
-    it "é igual quando mesmo código" do
+    it "is equal when same code" do
       currency1 = described_class.new("USD")
       currency2 = described_class.new("USD")
       expect(currency1).to eq(currency2)
     end
 
-    it "é diferente quando códigos diferentes" do
+    it "is different when codes are different" do
       currency1 = described_class.new("USD")
       currency2 = described_class.new("BRL")
       expect(currency1).not_to eq(currency2)
@@ -56,7 +56,7 @@ RSpec.describe Transactions::ValueObjects::Currency do
   end
 
   describe "#to_s" do
-    it "retorna o código" do
+    it "returns the code" do
       currency = described_class.new("EUR")
       expect(currency.to_s).to eq("EUR")
     end
