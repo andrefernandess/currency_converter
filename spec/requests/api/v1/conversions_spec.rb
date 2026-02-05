@@ -8,6 +8,8 @@ RSpec.describe 'api/v1/conversions', type: :request do
       description 'Realiza a conversão entre duas moedas utilizando taxas em tempo real'
       consumes 'application/json'
       produces 'application/json'
+
+      let(:user) { create(:user) }
       
       parameter name: :conversion, in: :body, schema: {
         type: :object,
@@ -41,7 +43,7 @@ RSpec.describe 'api/v1/conversions', type: :request do
         let(:conversion) do
           {
             conversion: {
-              user_id: 123,
+              user_id: user.id,
               from_currency: 'USD',
               to_currency: 'BRL',
               amount: 100.0
@@ -67,7 +69,7 @@ RSpec.describe 'api/v1/conversions', type: :request do
         let(:conversion) do
           {
             conversion: {
-              user_id: 123,
+              user_id: user.id,
               from_currency: 'USD',
               to_currency: 'USD',
               amount: 100.0
@@ -87,7 +89,7 @@ RSpec.describe 'api/v1/conversions', type: :request do
         let(:conversion) do
           {
             conversion: {
-              user_id: 123,
+              user_id: user.id,
               from_currency: 'USD',
               to_currency: 'BRL',
               amount: 0
@@ -105,12 +107,7 @@ RSpec.describe 'api/v1/conversions', type: :request do
                }
 
         let(:conversion) do
-          {
-            user_id: 123,
-            from_currency: 'USD',
-            to_currency: 'BRL',
-            amount: 100.0
-          }
+          {}
         end
 
         run_test!

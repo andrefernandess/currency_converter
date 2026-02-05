@@ -20,15 +20,16 @@ module ApiErrorHandler
   end
 
   def handle_validation_error(exception)
-    render_error(exception.message, :unprocessable_entity)
+    render json: { errors: exception.record.errors.full_messages }, status: :unprocessable_entity
   end
 
   def handle_not_found_error(exception)
-    render_error(exception.message, :not_found)
+    message = exception.respond_to?(:model) && exception.model.present? ? "#{exception.model} not found" : exception.message
+    render_error(message, :not_found)
   end
 
   def handle_argument_error(exception)
-    render_error(exception.message, :bad_request)
+    render_error(exception.message, :unprocessable_entity)
   end
 
   def handle_parameter_missing_error(exception)

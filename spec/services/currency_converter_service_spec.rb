@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CurrencyConverterService do
-  let(:user_id) { 123 }
+  let(:user) { create(:user) }
+  let(:user_id) { user.id }
   let(:from_currency) { "USD" }
   let(:to_currency) { "BRL" }
   let(:amount) { 100.0 }

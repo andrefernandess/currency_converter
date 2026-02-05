@@ -31,7 +31,8 @@ RSpec.describe 'api/v1/transactions', type: :request do
                  }
                }
 
-        let(:user_id) { 123 }
+        let(:user) { create(:user) }
+        let(:user_id) { user.id }
 
         before do
           allow_any_instance_of(CurrencyApiClientService).to receive(:latest_rates).and_return(
@@ -39,7 +40,7 @@ RSpec.describe 'api/v1/transactions', type: :request do
           )
 
           CurrencyConverterService.new(
-            user_id: 123,
+            user_id: user.id,
             from_currency: 'USD',
             to_currency: 'BRL',
             amount: 100

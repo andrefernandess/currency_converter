@@ -16,6 +16,7 @@ RSpec.describe Transaction, type: :model do
 
     describe "user_id" do
       it "is required" do
+        transaction.user = nil
         transaction.user_id = nil
         expect(transaction).not_to be_valid
       end

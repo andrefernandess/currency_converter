@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :transaction do
-    user_id { 123 }
+    association :user, strategy: :create
     from_currency { 'USD' }
     to_currency { 'BRL' }
     from_value { 100.0 }
