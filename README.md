@@ -152,7 +152,7 @@ http://localhost:3000/api/v1
 **Request:**
 
 ```bash
-curl -X POST "http://localhost:3000/api/v1/conversions" \
+curl -X POST "http://localhost:3000/api/v1/convert" \
   -H "Content-Type: application/json" \
   -d '{
     "conversion": {
@@ -219,7 +219,7 @@ curl -X GET "http://localhost:3000/api/v1/transactions?user_id=123"
 **Moedas Iguais (422):**
 
 ```bash
-curl -X POST "http://localhost:3000/api/v1/conversions" \
+curl -X POST "http://localhost:3000/api/v1/convert" \
   -H "Content-Type: application/json" \
   -d '{
     "conversion": {
@@ -234,7 +234,7 @@ curl -X POST "http://localhost:3000/api/v1/conversions" \
 **Valor Inválido (422):**
 
 ```bash
-curl -X POST "http://localhost:3000/api/v1/conversions" \
+curl -X POST "http://localhost:3000/api/v1/convert" \
   -H "Content-Type: application/json" \
   -d '{
     "conversion": {
